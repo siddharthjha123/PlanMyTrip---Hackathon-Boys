@@ -68,7 +68,7 @@ def parse_itinerary(itinerary_text):
 
 @app.route('/')
 def landing_page():
-    return render_template('LandingPage.html') 
+    return render_template('Landing.html') 
 
 @app.route('/trip')
 def trip_page():
