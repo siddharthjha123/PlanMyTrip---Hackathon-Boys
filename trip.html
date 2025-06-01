@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">TripPlanner</div>
-        <button class="login-btn">Login</button>
+        <button class="login-btn"><a href="Landing.html">Home</a></button>
     </nav>
 
     <div class="container">
@@ -62,6 +62,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
+
 
         let markers = [];
         let currentStep = 0;
