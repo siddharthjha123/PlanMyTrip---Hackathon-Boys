@@ -70,7 +70,7 @@ def parse_itinerary(itinerary_text):
 def landing_page():
     return render_template('Landing.html') 
 
-@app.route('/templates/trip')
+@app.route('/trip')
 def trip_page():
     return render_template('trip.html')
 
