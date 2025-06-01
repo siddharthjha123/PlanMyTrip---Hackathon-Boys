@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripPlanner</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">TripPlanner</div>
+        <button class="login-btn">Login</button>
+    </nav>
+
+    <div class="container">
+        <!-- Left Section - Chat -->
+        <div class="chat-section">
+            <div class="chat-header">
+                <span class="icon">✈️</span>
+                Travel Assistant
+            </div>
+            <div class="chat-container">
+                <!-- Chat content will go here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message...">
+                <button class="send-btn">➤</button>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <!-- Itinerary Section -->
+            <div class="itinerary-section">
+                <div class="itinerary-header">
+                    <span class="icon">📍</span>
+                    5-Day Trip to London
+                </div>
+                <div class="itinerary-content">
+                    <!-- Itinerary content will go here -->
+                </div>
+            </div>
+            
+            <!-- Map Section -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+
+    <script>
+        const map = L.map('map').setView([18.9582, 72.8321], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var singleMarker = L.marker([18.9582, 72.8321]).addTo(map);
+        var popup  = singleMarker.bindPopup('This is mumbai').openPopup();
+        popup.addTo(map);
+
+    </script>
+</body>
+</html> 
