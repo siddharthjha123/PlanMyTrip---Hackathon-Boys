@@ -23,12 +23,12 @@
                 <span class="icon">✈️</span>
                 Travel Assistant
             </div>
-            <div class="chat-container">
-                <!-- Chat content will go here -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Chat messages will appear here -->
             </div>
             <div class="chat-input">
-                <input type="text" placeholder="Type your message...">
-                <button class="send-btn">➤</button>
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button class="send-btn" onclick="handleUserInput()">➤</button>
             </div>
         </div>
 
@@ -38,10 +38,10 @@
             <div class="itinerary-section">
                 <div class="itinerary-header">
                     <span class="icon">📍</span>
-                    5-Day Trip to London
+                    Trip Itinerary
                 </div>
-                <div class="itinerary-content">
-                    <!-- Itinerary content will go here -->
+                <div class="itinerary-content" id="itineraryContent">
+                    <!-- Itinerary will appear here -->
                 </div>
             </div>
             
@@ -58,18 +58,120 @@
         crossorigin=""></script>
 
     <script>
-        const map = L.map('map').setView([18.9582, 72.8321], 13);
-
+        let map = L.map('map').setView([20.5937, 78.9629], 4); // Default view of India
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var singleMarker = L.marker([18.9582, 72.8321]).addTo(map);
-        var popup  = singleMarker.bindPopup('This is mumbai').openPopup();
-        popup.addTo(map);
+        let markers = [];
+        let currentStep = 0;
+        let userResponses = {};
 
-        
+        const questions = [
+            "Where would you like to go?",
+            "How many days are you planning to stay?",
+            "What's your budget in rupees?"
+        ];
 
+        function addMessage(message, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = isUser ? 'user-message' : 'bot-message';
+            messageDiv.textContent = message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function handleUserInput() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            input.value = '';
+
+            switch (currentStep) {
+                case 0:
+                    userResponses.destination = message;
+                    addMessage(questions[1]);
+                    break;
+                case 1:
+                    userResponses.duration = message;
+                    addMessage(questions[2]);
+                    break;
+                case 2:
+                    userResponses.budget = message;
+                    generateItinerary();
+                    break;
+            }
+            currentStep++;
+        }
+
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        async function generateItinerary() {
+            addMessage("Generating your personalized itinerary...");
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userResponses)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update itinerary content
+                document.getElementById('itineraryContent').innerHTML = data.itinerary.replace(/\n/g, '<br>');
+                
+                // Update map view to destination
+                if (data.main_coordinates) {
+                    map.setView([data.main_coordinates.lat, data.main_coordinates.lng], 12);
+                }
+
+                // Clear existing markers
+                clearMarkers();
+
+                // Add markers for all places
+                data.places.forEach(place => {
+                    const marker = L.marker([place.coordinates.lat, place.coordinates.lng])
+                        .bindPopup(`<b>${place.place}</b><br>
+                                  ${place.day}<br>
+                                  Time: ${place.time}<br>
+                                  Cost: ${place.cost}<br>
+                                  Transport: ${place.transport}`)
+                        .addTo(map);
+                    markers.push(marker);
+                });
+
+                addMessage("Here's your itinerary! The map shows all the locations you'll visit.");
+                
+                // Reset for new conversation
+                currentStep = 0;
+                userResponses = {};
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage("Sorry, there was an error generating your itinerary. Please try again.");
+                currentStep = 0;
+                userResponses = {};
+            }
+        }
+
+        // Start the conversation
+        addMessage(questions[0]);
     </script>
 </body>
 </html> 

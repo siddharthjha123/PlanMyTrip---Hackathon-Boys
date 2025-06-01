@@ -66,6 +66,9 @@ body {
     flex-grow: 1;
     padding: 1rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .chat-input {
@@ -90,6 +93,25 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.bot-message, .user-message {
+    max-width: 80%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+.bot-message {
+    background-color: #FFFFF0;
+    align-self: flex-start;
+    border: 1px solid #C2B280;
+}
+
+.user-message {
+    background-color: #5D4047;
+    color: #FFFFF0;
+    align-self: flex-end;
 }
 
 /* Right Section */
@@ -120,6 +142,8 @@ body {
 
 .itinerary-content {
     padding: 1rem;
+    line-height: 1.6;
+    white-space: pre-line;
 }
 
 .map-container {
@@ -138,4 +162,23 @@ body {
 /* Icons */
 .icon {
     font-size: 1.2rem;
+}
+
+/* Improve scrollbar appearance */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F7E7CE;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #C2B280;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #5D4047;
 } 
