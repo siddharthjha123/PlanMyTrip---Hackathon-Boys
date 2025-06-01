@@ -83,7 +83,7 @@ def chat():
     Make times realistic and include travel times between locations."""
 
     try:
-        # Using the new OpenAI client format
+        # Using the new OpenAI client formatsdsd
         response = client.chat.completions.create(
             model="deepseek-ai/DeepSeek-R1-0528",
             messages=[
