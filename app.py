@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -65,6 +65,14 @@ def parse_itinerary(itinerary_text):
                 continue
     
     return places
+
+@app.route('/')
+def landing_page():
+    return render_template('LandingPage.html') 
+
+@app.route('/trip')
+def trip_page():
+    return render_template('trip.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():

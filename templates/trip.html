@@ -13,7 +13,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">TripPlanner</div>
-        <button class="login-btn"><a href="Landing.html">Home</a></button>
+        <button class="login-btn"><a href="/">Home</a></button>
     </nav>
 
     <div class="container">
@@ -117,7 +117,7 @@
             addMessage("Generating your personalized itinerary...");
             
             try {
-                const response = await fetch('http://localhost:5000/api/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
