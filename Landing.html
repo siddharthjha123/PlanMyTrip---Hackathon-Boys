@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripPlanner - Your AI Travel Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #FFFFF0;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #5D4047;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: #5D4047;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #F7E7CE;
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-bottom: 1px solid #C2B280;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #5D4047;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+        }
+
+        .navbar-nav {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item a {
+            text-decoration: none;
+            color: #5D4047;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-item a:hover {
+            color: #C2B280;
+        }
+
+        .nav-item a i {
+            font-size: 1.1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+            animation: slideUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #5D4047;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: #5D4047;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: #5D4047;
+            color: #FFFFF0;
+        }
+
+        .btn-secondary {
+            background: #FFFFF0;
+            color: #5D4047;
+            border: 2px solid #5D4047;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 64, 71, 0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: #F7E7CE;
+        }
+
+        .features h2 {
+            text-align: center;
+            color: #5D4047;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #FFFFF0;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #C2B280;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(93, 64, 71, 0.1);
+            background: #FFFFF0;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #5D4047;
+        }
+
+        .feature-card h3 {
+            color: #5D4047;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: #5D4047;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .navbar-nav {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <i class="fas fa-plane"></i>
+            TripPlanner
+        </a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Plan Your Perfect Trip with AI</h1>
+            <p>Our advanced AI-powered system helps you create personalized travel itineraries, discover hidden gems, and make the most of your journey with smart recommendations and real-time assistance.</p>
+            <div class="cta-buttons">
+                <a href="/trip.html" class="btn btn-primary">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Start Planning
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose TripPlanner?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-brain feature-icon"></i>
+                <h3>AI-Powered Planning</h3>
+                <p>Our intelligent system creates personalized itineraries based on your preferences, budget, and travel style.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-map-marked-alt feature-icon"></i>
+                <h3>Smart Itineraries</h3>
+                <p>Get detailed day-by-day plans with optimized routes, local recommendations, and hidden gems.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-comments feature-icon"></i>
+                <h3>Interactive Assistant</h3>
+                <p>Chat with our AI travel assistant to get instant answers and make real-time adjustments to your plans.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // Click animation
+        document.addEventListener('click', (e) => {
+            const bubble = document.createElement('div');
+            bubble.className = 'click-bubble';
+            bubble.style.left = e.clientX + 'px';
+            bubble.style.top = e.clientY + 'px';
+            document.body.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 600);
+        });
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        document.querySelectorAll('.feature-card').forEach((card) => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html> 
